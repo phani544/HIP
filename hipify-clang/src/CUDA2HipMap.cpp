@@ -312,9 +312,16 @@ const std::map<llvm::StringRef, hipCounter> CUDA_TYPE_NAME_MAP{
 /// Maps cuda header names to hip header names.
 const std::map <llvm::StringRef, hipCounter> CUDA_INCLUDE_MAP{
     // CUDA includes
-    {"cuda.h",             {"hip/hip_runtime.h",     CONV_INCLUDE_CUDA_MAIN_H, API_DRIVER}},
-    {"cuda_runtime.h",     {"hip/hip_runtime.h",     CONV_INCLUDE_CUDA_MAIN_H, API_RUNTIME}},
-    {"cuda_runtime_api.h", {"hip/hip_runtime_api.h", CONV_INCLUDE,             API_RUNTIME}},
+    {"cuda.h",               {"hip/hip_runtime.h",        CONV_INCLUDE_CUDA_MAIN_H, API_DRIVER}},
+    {"cuda_runtime.h",       {"hip/hip_runtime.h",        CONV_INCLUDE_CUDA_MAIN_H, API_RUNTIME}},
+    {"cuda_runtime_api.h",   {"hip/hip_runtime_api.h",    CONV_INCLUDE,             API_RUNTIME}},
+    {"channel_descriptor.h", {"hip/channel_descriptor.h", CONV_INCLUDE,             API_RUNTIME}},
+    {"device_functions.h",   {"hip/device_functions.h",   CONV_INCLUDE,             API_RUNTIME}},
+    {"driver_types.h",       {"hip/driver_types.h",       CONV_INCLUDE,             API_RUNTIME}},
+    {"cuComplex.h",          {"hip/hip_complex.h",        CONV_INCLUDE,             API_RUNTIME}},
+    {"cuda_fp16.h",          {"hip/hip_fp16.h",           CONV_INCLUDE,             API_RUNTIME}},
+    {"cuda_texture_types.h", {"hip/hip_texture_types.h",  CONV_INCLUDE,             API_RUNTIME}},
+    {"vector_types.h",       {"hip/hip_vector_types.h",   CONV_INCLUDE,             API_RUNTIME}},
 
     // CUBLAS includes
     {"cublas.h",    {"hipblas.h", CONV_INCLUDE, API_BLAS}},
@@ -1453,35 +1460,6 @@ const std::map<llvm::StringRef, hipCounter> CUDA_IDENTIFIER_MAP{
     {"cudaHostRegisterPortable", {"hipHostRegisterPortable", CONV_MEM, API_RUNTIME}},
     {"cudaHostRegisterMapped",   {"hipHostRegisterMapped",   CONV_MEM, API_RUNTIME}},
     {"cudaHostRegisterIoMemory", {"hipHostRegisterIoMemory", CONV_MEM, API_RUNTIME}},
-
-    // Coordinate Indexing and Dimensions
-    {"threadIdx.x", {"hipThreadIdx_x", CONV_COORD_FUNC,   API_RUNTIME}},
-    {"threadIdx.y", {"hipThreadIdx_y", CONV_COORD_FUNC,   API_RUNTIME}},
-    {"threadIdx.z", {"hipThreadIdx_z", CONV_COORD_FUNC,   API_RUNTIME}},
-
-    {"blockIdx.x",  {"hipBlockIdx_x",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockIdx.y",  {"hipBlockIdx_y",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockIdx.z",  {"hipBlockIdx_z",  CONV_COORD_FUNC,   API_RUNTIME}},
-
-    {"blockDim.x",  {"hipBlockDim_x",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockDim.y",  {"hipBlockDim_y",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockDim.z",  {"hipBlockDim_z",  CONV_COORD_FUNC,   API_RUNTIME}},
-
-    {"gridDim.x",   {"hipGridDim_x",   CONV_COORD_FUNC,   API_RUNTIME}},
-    {"gridDim.y",   {"hipGridDim_y",   CONV_COORD_FUNC,   API_RUNTIME}},
-    {"gridDim.z",   {"hipGridDim_z",   CONV_COORD_FUNC,   API_RUNTIME}},
-
-    {"blockIdx.x",  {"hipBlockIdx_x",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockIdx.y",  {"hipBlockIdx_y",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockIdx.z",  {"hipBlockIdx_z",  CONV_COORD_FUNC,   API_RUNTIME}},
-
-    {"blockDim.x",  {"hipBlockDim_x",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockDim.y",  {"hipBlockDim_y",  CONV_COORD_FUNC,   API_RUNTIME}},
-    {"blockDim.z",  {"hipBlockDim_z",  CONV_COORD_FUNC,   API_RUNTIME}},
-
-    {"gridDim.x",   {"hipGridDim_x",   CONV_COORD_FUNC,   API_RUNTIME}},
-    {"gridDim.y",   {"hipGridDim_y",   CONV_COORD_FUNC,   API_RUNTIME}},
-    {"gridDim.z",   {"hipGridDim_z",   CONV_COORD_FUNC,   API_RUNTIME}},
 
     {"warpSize",    {"hipWarpSize",    CONV_SPECIAL_FUNC, API_RUNTIME}},
 
@@ -2677,7 +2655,6 @@ const std::map<llvm::StringRef, hipCounter>& CUDA_RENAMES_MAP() {
 
     // First run, so compute the union map.
     ret = CUDA_IDENTIFIER_MAP;
-    ret.insert(CUDA_INCLUDE_MAP.begin(), CUDA_INCLUDE_MAP.end());
     ret.insert(CUDA_TYPE_NAME_MAP.begin(), CUDA_TYPE_NAME_MAP.end());
 
     return ret;

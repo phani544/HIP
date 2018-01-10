@@ -779,6 +779,8 @@ hipError_t ihipDevice_t::initProperties(hipDeviceProp_t* prop)
     // Get agent name
 
     err = hsa_agent_get_info(_hsaAgent, (hsa_agent_info_t)HSA_AMD_AGENT_INFO_PRODUCT_NAME, &(prop->name));
+    DeviceErrorCheck(err);
+
     char archName[256];
     err = hsa_agent_get_info(_hsaAgent, HSA_AGENT_INFO_NAME, &archName);
 
@@ -1592,7 +1594,9 @@ void ihipPostLaunchKernel(const char *kernelName, hipStream_t stream, grid_launc
     tprintf(DB_SYNC, "ihipPostLaunchKernel, unlocking stream\n");
 
     stream->lockclose_postKernelCommand(kernelName, lp.av);
-    MARKER_END();
+    if(HIP_PROFILE_API) {
+        MARKER_END();
+    }
 }
 
 //=================================================================================================
